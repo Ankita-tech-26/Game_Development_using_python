@@ -1,0 +1,62 @@
+page = [
+    [' ', ' ', ' '],
+    [' ', ' ', ' '],
+    [' ', ' ', ' ']
+]
+
+
+def display_page(page):
+    for row in page:
+        print('|'.join(row))
+        print('-' * 5)
+
+
+def check_winner(page, players):
+    
+    for i in range(3):
+        if all(page[i][j] == players for j in range(3)) or \
+           all(page[j][i] == players for j in range(3)):
+            return True
+
+    
+    if all(page[i][i] == players for i in range(3)) or \
+       all(page[i][2-i] == players for i in range(3)):
+        return True
+    return False
+
+
+def check_draw(page):
+    return all(page[i][j] != ' ' for i in range(3) for j in range(3))
+
+
+current_players = 'X'
+while True:
+    display_page(page)
+    
+    
+    while True:
+        row = int(input(f'player {current_players}, enter the row (0-2): '))
+        col = int(input(f'player {current_players}, enter the column (0-2): '))
+        if 0 <= row < 3 and 0 <= col < 3 and page[row][col] == ' ':
+            break
+        else:
+            print('Invalid input. Try again.')
+
+    
+    page[row][col] = current_players
+    
+    
+    if check_winner(page, current_players):
+        display_page(page)
+        print(f'player {current_players} won!')
+        break
+    
+    
+    if check_draw(page):
+        display_page(page)
+        print('It is a tie.')
+        break
+    
+    
+    current_players = 'O' if current_players == 'X' else 'X'
+
